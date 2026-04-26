@@ -1,0 +1,19 @@
+let x = 2;
+let y = 3;
+print(x + y);
+
+if (x < y) {
+    print(100);
+} else {
+    print(200);
+}
+
+let i = 0;
+while (i < 3) {
+    print(i);
+    i = i + 1;
+}
+
+for (let j = 0; j < 3; j = j + 1) {
+    print(j + 10);
+}

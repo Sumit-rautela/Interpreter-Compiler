@@ -1,0 +1,30 @@
+let x = 2.5;
+let y = 3;
+let name = "Sumit";
+let letter = 'A';
+
+print(name + " -> " + letter);
+print(x + y);
+
+if (x < y) {
+    print(100.25);
+} else {
+    print(200);
+}
+
+let i = 0;
+while (i < 3) {
+    if (i == 1) {
+        i = i + 1;
+        continue;
+    }
+    print(i);
+    i = i + 1;
+}
+
+for (let j = 0; j < 3; j = j + 1) {
+    if (j == 4) {
+        break;
+    }
+    print(j + 10);
+}
