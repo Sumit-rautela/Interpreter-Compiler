@@ -4,11 +4,12 @@
 #include "lexer.h"
 #include "ast.h"
 #include <vector>
+#include <cstddef>
 
 class Parser {
 private:
     vector<Token> tokens;
-    int pos;
+    size_t pos;
 
     void parseError(const string& message) {
         cout << message << "\n";

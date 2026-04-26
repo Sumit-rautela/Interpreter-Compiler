@@ -3,15 +3,17 @@
 
 #include "ast.h"
 #include <fstream>
+#include <string>
+#include <vector>
 using namespace std;
 
 class CodeGenerator {
 public:
-    string indent(int level) {
+    string indent(int level) const {
         return string(level * 4, ' ');
     }
 
-    string escapeForCppString(const string& value) {
+    string escapeForCppString(const string& value) const {
         string out;
         for (char c : value) {
             if (c == '\\') out += "\\\\";
@@ -23,7 +25,7 @@ public:
         return out;
     }
 
-    string escapeForCppChar(char c) {
+    string escapeForCppChar(char c) const {
         if (c == '\\') return "\\\\";
         if (c == '\'') return "\\'";
         if (c == '\n') return "\\n";
@@ -31,7 +33,7 @@ public:
         return string(1, c);
     }
 
-    string generateExpr(Expr* node) {
+    string generateExpr(Expr* node) const {
         if (auto num = dynamic_cast<NumberExpr*>(node))
             return to_string(num->value);
 
@@ -45,13 +47,14 @@ public:
             return var->name;
 
         if (auto bin = dynamic_cast<BinaryExpr*>(node)) {
-            return generateExpr(bin->left) + " " + bin->op + " " + generateExpr(bin->right);
+            // Keep AST precedence explicit in generated C++.
+            return "(" + generateExpr(bin->left) + " " + bin->op + " " + generateExpr(bin->right) + ")";
         }
 
         return "";
     }
 
-    string generateInlineStatement(Statement* stmt) {
+    string generateInlineStatement(Statement* stmt) const {
         if (auto letStmt = dynamic_cast<LetStatement*>(stmt)) {
             return "auto " + letStmt->name + " = " + generateExpr(letStmt->value);
         }
@@ -63,7 +66,7 @@ public:
         return "";
     }
 
-    void generateStatement(Statement* stmt, ofstream& out, int level) {
+    void generateStatement(Statement* stmt, ofstream& out, int level) const {
         if (auto letStmt = dynamic_cast<LetStatement*>(stmt)) {
             out << indent(level) << "auto " << letStmt->name << " = "
                 << generateExpr(letStmt->value) << ";\n";
@@ -163,7 +166,7 @@ public:
         }
     }
 
-    void generate(vector<Statement*> program) {
+    void generate(const vector<Statement*>& program) const {
         ofstream out("output.cpp");
 
         out << "#include <iostream>\nusing namespace std;\n\n";

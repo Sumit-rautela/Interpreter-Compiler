@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <cctype>
+#include <cstddef>
 using namespace std;
 
 enum TokenType {
@@ -25,7 +26,7 @@ struct Token {
 class Lexer {
 private:
     string input;
-    int pos;
+    size_t pos;
 
 public:
     Lexer(string input) {
